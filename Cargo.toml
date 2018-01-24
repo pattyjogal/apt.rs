@@ -2,6 +2,11 @@
 name = "apt-rs"
 version = "0.1.0"
 authors = ["Patrick Gallagher <patrickj@cpgallagher.com>"]
+description = "A Rust client for batch installing Aptitude packages (a la Cargo.toml)"
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/pattyjogal/apt.rs"
+
 
 [dependencies]
 toml = "0.4"
