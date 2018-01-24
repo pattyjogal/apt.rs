@@ -36,7 +36,7 @@ fn extract_section(section_name: &str, master_table: Value) -> Value {
 
 fn main() {
     // Grab all the whole Toml file
-    let master_table = read_toml("/home/patrick/IdeaProjects/Apt-Rs/Example.toml");
+    let master_table = read_toml("./Packages.toml");
     let dependencies = extract_section("dependencies", master_table);
     let mut dep_vec: Vec<String> = Vec::new();
 

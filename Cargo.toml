@@ -1,7 +1,7 @@
 [package]
-name = "Apt-Rs"
+name = "apt-rs"
 version = "0.1.0"
-authors = ["patrick"]
+authors = ["Patrick Gallagher <patrickj@cpgallagher.com>"]
 
 [dependencies]
 toml = "0.4"
