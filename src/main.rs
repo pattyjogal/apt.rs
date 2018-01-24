@@ -7,6 +7,7 @@ use std::collections::BTreeMap;
 use std::process::Command;
 
 use toml::Value;
+use std::process::Stdio;
 
 pub mod data_types;
 
@@ -52,18 +53,16 @@ fn main() {
     }
 
     // Now attempt to install with apt
-    let result = Command::new("apt")
-        .arg("-y")
-        .arg("install")
-        .arg(dep_vec.join(" "))
-        .output()
-        .expect("Process failed to execute");
+    let mut command = Command::new("apt");
+    command.arg("-y").arg("install");
 
-
-
-    // Let the user see the output
-    if result.stderr.len() > 0 {
-        println!("{}", String::from_utf8_lossy(&result.stderr));
+    for arg in dep_vec {
+        command.arg(arg);
     }
-    println!("{}", String::from_utf8_lossy(&result.stdout));
+
+    let result = command.stdout(Stdio::inherit()).spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
+    println!("All done!");
 }
