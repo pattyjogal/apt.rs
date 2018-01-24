@@ -8,7 +8,8 @@ up and running, I always find myself reinstalling a whole bunch of
 apt packages. 
 
 Because of this, I wanted to make a sort of `Cargo.toml`, or `requirements.txt` 
-that works in conjucntion with apt. 
+that works in conjucntion with apt. This can be used personally, or in projects
+that may require certain programs to be installed.
 
 In its current phase, the project is limited, though very simple. I hope
 to extend it to include more apt setup commands, and also at some point
