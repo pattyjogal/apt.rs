@@ -1,6 +1,6 @@
 [package]
 name = "apt-rs"
-version = "0.1.1"
+version = "0.2.1"
 authors = ["Patrick Gallagher <patrickj@cpgallagher.com>"]
 description = "A Rust client for batch installing Aptitude packages (a la Cargo.toml)"
 readme = "README.md"
