@@ -6,9 +6,7 @@ use std::fs::File;
 use std::collections::BTreeMap;
 use std::process::Command;
 
-
 use toml::Value;
-use toml::value::Table;
 
 pub mod data_types;
 
@@ -54,14 +52,18 @@ fn main() {
     }
 
     // Now attempt to install with apt
-    let output = Command::new("apt")
+    let result = Command::new("apt")
         .arg("-y")
         .arg("install")
         .arg(dep_vec.join(" "))
         .output()
-        .expect("Process failed to execute")
-        .stdout;
+        .expect("Process failed to execute");
+
+
 
     // Let the user see the output
-    println!("{}", String::from_utf8_lossy(&output));
+    if result.stderr.len() > 0 {
+        println!("{}", String::from_utf8_lossy(&result.stderr));
+    }
+    println!("{}", String::from_utf8_lossy(&result.stdout));
 }
