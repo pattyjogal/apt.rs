@@ -1,0 +1,7 @@
+[package]
+name = "Apt-Rs"
+version = "0.1.0"
+authors = ["patrick"]
+
+[dependencies]
+toml = "0.4"
