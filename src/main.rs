@@ -26,17 +26,37 @@ fn read_toml(path: &str) -> Value {
     s.parse::<Value>().unwrap()
 }
 
-fn extract_section(section_name: &str, master_table: Value) -> Value {
+fn extract_section(section_name: &str, master_table: &Value) -> Value {
     match master_table.get(section_name) {
         Some(value) => value.clone(),
         None => panic!("No such key {} found in master table!", section_name),
     }
 }
 
+/// If the user has specified that they're using apt, we execute apt specific
+/// commands, like installing PPAs.
+fn apt_install(dependencies: Vec<String>, master_table: &Value) -> Command {
+    // PPA phase
+    let ppas = extract_section("ppas", master_table);
+
+    // Now attempt to install with apt
+    let mut command = Command::new("apt");
+    command.arg("-y").arg("install");
+    for arg in dependencies {
+        command.arg(arg);
+    }
+    command
+}
+
 fn main() {
     // Grab all the whole Toml file
     let master_table = read_toml("./Packages.toml");
-    let dependencies = extract_section("dependencies", master_table);
+
+    let config = extract_section("config", &master_table);
+    let platform = config.get("platform").unwrap().to_string();
+
+    // Dependency Phase
+    let dependencies = extract_section("dependencies", &master_table);
     let mut dep_vec: Vec<String> = Vec::new();
 
     // Iterate over the dependencies section
@@ -52,13 +72,10 @@ fn main() {
         })
     }
 
-    // Now attempt to install with apt
-    let mut command = Command::new("apt");
-    command.arg("-y").arg("install");
-
-    for arg in dep_vec {
-        command.arg(arg);
-    }
+    let mut command = match platform.as_ref() {
+        "apt" => apt_install(dep_vec, &master_table),
+        _ => Command::new("anything")
+    };
 
     let result = command.stdout(Stdio::inherit()).spawn()
         .unwrap()
